@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: fastapi
   template:
-    matadata:
+    metadata:
       labels:
         app: fastapi
       spec:
