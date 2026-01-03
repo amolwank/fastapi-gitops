@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: fastapi
 spec:
-  replicas: {{.Values.replicaCount}}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: fastapi
@@ -11,10 +11,10 @@ spec:
     metadata:
       labels:
         app: fastapi
-      spec:
-        containers:
-          - name: fastapi
-            image: "{{.Values.image.repositoty}}:{{.Values.image.tag}}"
-            ports:
-              - containerPort: 8000
-
+    spec:            # <--- MOVE THIS LEFT: Align it with 'metadata'
+      containers:
+        - name: fastapi
+          # Use 'repository' not 'repositoty'
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8000
