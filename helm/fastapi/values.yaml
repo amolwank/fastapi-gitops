@@ -1,5 +1,5 @@
 image:
-  repository:
+  repository: 774305591014.dkr.ecr.us-east-1.amazonaws.com/fastapi
   tag: "4477f7f"
 
 replicaCount: 2
