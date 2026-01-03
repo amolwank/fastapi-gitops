@@ -1,6 +1,6 @@
 image:
   repository:
-  tag: "initial"
+  tag: "4477f7f"
 
 replicaCount: 2
 
