@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    matadata:
+      labels:
+        app: fastapi
+      spec:
+        containers:
+          - name: fastapi
+            image: "{{.Values.image.repositoty}}:{{.Values.image.tag}}"
+            ports:
+              - containerPort: 8000
+

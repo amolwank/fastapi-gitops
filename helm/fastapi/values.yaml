@@ -1,0 +1,9 @@
+image:
+  repository:
+  tag: "initial"
+
+replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 8000
