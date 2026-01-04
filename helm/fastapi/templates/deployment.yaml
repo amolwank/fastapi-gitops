@@ -11,10 +11,9 @@ spec:
     metadata:
       labels:
         app: fastapi
-    spec:            # <--- MOVE THIS LEFT: Align it with 'metadata'
+    spec: # This is now correctly aligned under 'template'
       containers:
         - name: fastapi
-          # Use 'repository' not 'repositoty'
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 8000
