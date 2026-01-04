@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fastapi
+  name: {{ include "fastapi.fullname" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -11,11 +11,12 @@ spec:
     metadata:
       labels:
         app: fastapi
-    spec: # This is now correctly aligned under 'template'
+    spec:
       imagePullSecrets:
         - name: ecr-secret
       containers:
         - name: fastapi
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 8000
+            - name: http
+              containerPort: 8000

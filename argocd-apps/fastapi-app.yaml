@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fastapi-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/amolwank/fastapi-gitops.git'
+    targetRevision: HEAD
+    path: helm/fastapi  # The folder where your Chart.yaml is
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc' # This means "this local cluster"
+    namespace: fastapi-namespace # The namespace where your app will live
+  syncPolicy:
+    automated:
+      prune: true    # Deletes resources if you remove them from Git
+      selfHeal: true # Fixes things if you manually change them via kubectl
+    syncOptions:
+      - CreateNamespace=true # Tells ArgoCD to create 'fastapi-namespace' for you
