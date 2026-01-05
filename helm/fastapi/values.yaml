@@ -1,6 +1,6 @@
 image:
   repository: 774305591014.dkr.ecr.us-east-1.amazonaws.com/fast_api
-  tag: "de11200"
+  tag: "0fcb1f0"
 
 replicaCount: 2
 
