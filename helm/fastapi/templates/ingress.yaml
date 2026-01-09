@@ -2,13 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: fastapi-ingress
+  namespace: fastapi-namespace
   annotations:
-    # Use this if you are using NGINX Ingress Controller
-    kubernetes.io/ingress.class: "nginx"
-    # Optional: useful for FastAPI if you have long-running requests
+    # Keep your existing annotations
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 spec:
+  ingressClassName: nginx  # <--- ADD THIS LINE
   rules:
   - host: {{ .Values.ingress.host | quote }}
     http:
