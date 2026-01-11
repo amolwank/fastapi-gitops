@@ -2,7 +2,7 @@ image:
   repository: 774305591014.dkr.ecr.us-east-1.amazonaws.com/fast_api
   tag: "7b5595e"
 
-replicaCount: 2
+replicaCount: 4
 
 service:
   type: ClusterIP
