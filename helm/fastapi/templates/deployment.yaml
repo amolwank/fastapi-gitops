@@ -11,7 +11,7 @@ spec:
       stableService: {{ include "fastapi.fullname" . }}-stable
       trafficRouting:
         alb:
-          ingress: {{ include "fastapi.fullname" . }}-ingress
+          ingress: fastapi-ingress
           servicePort: 8000
 
       steps:
