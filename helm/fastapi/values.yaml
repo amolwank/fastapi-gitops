@@ -14,9 +14,9 @@ ingress:
 
 rollout:
   canary:
-    enabled: false
-  bluegreen:
     enabled: true
+  bluegreen:
+    enabled: false
 
   analysis:
     enabled: true
