@@ -15,6 +15,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: fastapi-stable
+            name: fastapi-app-stable
             port:
               number: 8000
