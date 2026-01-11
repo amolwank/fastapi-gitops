@@ -1,0 +1,17 @@
+{{- if .Values.rollout.analysis.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: fastapi-success-rate
+spec:
+  metrics:
+  - name: success-rate
+    interval: {{ .Values.rollout.analysis.interval }}
+    successCondition: {{ .Values.rollout.analysis.successCondition | quote }}
+    failureLimit: {{ .Values.rollout.analysis.failureLimit }}
+    provider:
+      prometheus:
+        address: {{ .Values.rollout.analysis.prometheusUrl }}
+        query: |
+{{ .Values.rollout.analysis.query | indent 10 }}
+{{- end }}

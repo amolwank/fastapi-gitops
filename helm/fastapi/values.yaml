@@ -17,3 +17,14 @@ rollout:
     enabled: false
   bluegreen:
     enabled: true
+
+  analysis:
+    enabled: true
+    interval: 30s
+    successCondition: "result[0] >= 0.95"
+    failureLimit: 3
+    prometheusUrl: http://prometheus-light.fastapi-namespace.svc.cluster.local:9090
+    query: |
+      sum(rate(http_requests_total{status!~"5.."}[2m])) /
+      sum(rate(http_requests_total[2m]))
+  

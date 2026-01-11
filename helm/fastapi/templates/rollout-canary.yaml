@@ -17,9 +17,13 @@ spec:
 
       steps:
       - setWeight: 20
-      - pause: { duration: 2m }
+      - analysis:
+          templates:
+          - templateName: fastapi-success-rate
       - setWeight: 50
-      - pause: { duration: 2m }
+      - analysis:
+          templates:
+          - templateName: fastapi-success-rate
       - setWeight: 100
 
   selector:
@@ -52,4 +56,4 @@ spec:
             port: 8000
           initialDelaySeconds: 2
           periodSeconds: 5
-{{- end }}          
+{{- end }}
