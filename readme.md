@@ -220,3 +220,109 @@ GitOps-driven releases
 Canary & Blue/Green deployments
 
 AWS-native ALB routing  
+
+
+
+-------------------------------
+♻️ Rebuild AWS EKS GitOps Platform – Playbook
+
+This recreates:
+
+VPC → EKS → ALB → ArgoCD → Prometheus → FastAPI → Rollouts
+
+🧱 Step-1 — Recreate VPC
+cd fastapi-eks/platform/vpc
+terraform init
+terraform apply
+
+
+Verify:
+
+aws ec2 describe-vpcs
+
+🧱 Step-2 — Recreate EKS
+cd ../eks
+terraform init
+terraform apply
+
+
+Configure kubectl:
+
+aws eks update-kubeconfig \
+  --region us-east-1 \
+  --name my-eks-cluster
+
+kubectl get nodes
+
+📦 Step-3 — Install AWS Load Balancer Controller
+eksctl utils associate-iam-oidc-provider \
+  --cluster my-eks-cluster \
+  --region us-east-1 \
+  --approve
+
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=my-eks-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+
+🚀 Step-4 — Install ArgoCD
+kubectl create namespace argocd
+kubectl apply -n argocd \
+  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+
+Get password:
+
+kubectl get secret argocd-initial-admin-secret \
+  -n argocd -o jsonpath="{.data.password}" | base64 -d
+
+📊 Step-5 — Install Prometheus
+kubectl create namespace monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/prometheus -n monitoring
+
+🔁 Step-6 — Install Argo Rollouts
+kubectl create namespace argo-rollouts
+kubectl apply -n argo-rollouts \
+  -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+
+📦 Step-7 — Connect GitOps Repo
+argocd login localhost:8080
+
+argocd app create fastapi \
+  --repo https://github.com/<your-username>/fastapi-gitops.git \
+  --path charts/fastapi \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace fastapi-namespace \
+  --sync-policy automated
+
+🚀 Step-8 — CI/CD kicks in
+
+Push code:
+
+git push
+
+
+CI will:
+
+Build → Push to ECR → Update Helm → ArgoCD deploys
+
+🌍 Step-9 — Get ALB URL
+kubectl get ingress -n fastapi-namespace
+
+
+Open ALB DNS → FastAPI is live.
+
+🏆 You now have
+Terraform → AWS
+GitHub → CI
+ArgoCD → CD
+Argo Rollouts → Blue/Green & Canary
+Prometheus → Auto promotion
+AWS ALB → Internet
