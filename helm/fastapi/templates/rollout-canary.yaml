@@ -1,3 +1,4 @@
+{{- if .Values.rollout.canary.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -51,3 +52,4 @@ spec:
             port: 8000
           initialDelaySeconds: 2
           periodSeconds: 5
+{{- end }}          

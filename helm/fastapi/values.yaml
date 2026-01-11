@@ -11,3 +11,9 @@ service:
 ingress:
   enabled: true
   host: fastapi.local  
+
+rollout:
+  canary:
+    enabled: false
+  bluegreen:
+    enabled: true
